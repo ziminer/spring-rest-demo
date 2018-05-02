@@ -1,0 +1,33 @@
+syntax = 'proto3';
+
+package echo;
+
+option java_package = "com.turbonomic.demo.spring";
+
+import "google/api/annotations.proto";
+
+message EchoRequest {
+    // The string the Echo Service should echo.
+    string echo = 1;
+}
+
+// This is the response message from EchoService calls.
+message EchoResponse {
+    // The echo the client asked for in the request.
+    string echo = 1;
+}
+
+
+// All functionality belonging to a single theme should be in a single service (similar
+// to regular Java interfaces). Don't limit yourself to one service per component (unless that
+// component only provides one item of functionality).
+service EchoService {
+
+    // The SingleEcho call makes a single request and gets a single response.
+    // The "echo" in the request and response will be the same.
+    rpc Echo(EchoRequest) returns (EchoResponse) {
+        option (google.api.http) = {
+            get: "/echo/{echo}"
+        };
+    }
+}
