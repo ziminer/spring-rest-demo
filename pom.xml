@@ -15,7 +15,7 @@
         <protobuf.version>3.0.0</protobuf.version>
         <protobuf.maven.plugin.version>0.5.0</protobuf.maven.plugin.version>
         <os.maven.plugin.version>1.4.1.Final</os.maven.plugin.version>
-        <springfox.version>2.4.0</springfox.version>
+        <springfox.version>2.7.0</springfox.version>
     </properties>
 
     <parent>
