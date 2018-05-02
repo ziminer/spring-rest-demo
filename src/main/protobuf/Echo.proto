@@ -6,28 +6,81 @@ option java_package = "com.turbonomic.demo.spring";
 
 import "google/api/annotations.proto";
 
-message EchoRequest {
-    // The string the Echo Service should echo.
-    string echo = 1;
+message EchoContent {
+    string content = 1;
 }
 
-// This is the response message from EchoService calls.
-message EchoResponse {
-    // The echo the client asked for in the request.
-    string echo = 1;
+message Echo {
+    int64 id = 1;
+    EchoContent content = 2;
 }
 
+message GetEchoRequest {
+    int64 id = 1;
+}
 
-// All functionality belonging to a single theme should be in a single service (similar
-// to regular Java interfaces). Don't limit yourself to one service per component (unless that
-// component only provides one item of functionality).
+message GetEchoResponse {
+    Echo echo = 1;
+}
+
+message DeleteEchoRequest {
+    int64 id = 1;
+}
+
+message DeleteEchoResponse {
+    Echo echo = 1;
+}
+
+message CreateEchoRequest {
+    int64 id = 1;
+    EchoContent content = 2;
+}
+
+message CreateEchoResponse {
+    Echo echo = 1;
+}
+
+message UpdateEchoRequest {
+    int64 id = 1;
+    EchoContent new_content = 2;
+}
+
+message UpdateEchoResponse {
+    Echo echo = 1;
+}
+
 service EchoService {
 
-    // The SingleEcho call makes a single request and gets a single response.
-    // The "echo" in the request and response will be the same.
-    rpc Echo(EchoRequest) returns (EchoResponse) {
+    rpc getEcho(GetEchoRequest) returns (GetEchoResponse) {
         option (google.api.http) = {
-            get: "/echo/{echo}"
+            get: "/echo/{id}"
+        };
+    }
+
+    rpc createEcho(CreateEchoRequest) returns (CreateEchoResponse) {
+        option (google.api.http) = {
+            post: "/echo/{id}"
+            body: "content"
+            additional_bindings {
+                post: "/echo"
+                body: "*"
+            }
+        };
+    }
+
+    rpc updateEcho(UpdateEchoRequest) returns (UpdateEchoResponse) {
+        option (google.api.http) = {
+            put: "/echo/{id}"
+            body: "new_content"
+            additional_bindings {
+                put: "/echo/{id}/{new_content.content}"
+            }
+        };
+    }
+
+    rpc deleteEcho(DeleteEchoRequest) returns (DeleteEchoResponse) {
+        option (google.api.http) = {
+            delete: "/echo/{id}"
         };
     }
 }

@@ -8,11 +8,16 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 
-import com.turbonomic.demo.spring.EchoREST.EchoServiceController;
 import io.grpc.Server;
 import io.grpc.ServerBuilder;
+import springfox.documentation.builders.PathSelectors;
+import springfox.documentation.builders.RequestHandlerSelectors;
+import springfox.documentation.spi.DocumentationType;
+import springfox.documentation.spring.web.plugins.Docket;
+import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
 @SpringBootApplication
+@EnableSwagger2
 public class Application {
 
     private final Object serverLock = new Object();
@@ -49,8 +54,13 @@ public class Application {
         return new EchoRpcService();
     }
 
-//    @Bean
-//    public EchoServiceController echoServiceController() {
-//        return new EchoServiceController(echoRpcService());
-//    }
+    @Bean
+    public Docket appApi() {
+        return new Docket(DocumentationType.SWAGGER_2)
+            .select()
+                .apis(RequestHandlerSelectors.basePackage("com.turbonomic.demo.spring"))
+                .paths(PathSelectors.any())
+                .build()
+            .pathMapping("/");
+    }
 }
